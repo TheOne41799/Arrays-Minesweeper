@@ -53,7 +53,7 @@ namespace Global
 	{
 		ui_service->render();
 		graphic_service->render();
-		board_service->update();
+		board_service->render();
 	}
 
 	void ServiceLocator::clearAllServices()
