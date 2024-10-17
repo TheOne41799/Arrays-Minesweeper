@@ -21,8 +21,9 @@ namespace Gameplay
 			CellController* cell_controller;
 
 			void initializeButtonImage(float width, float height);
+			sf::Vector2f getCellScreenPosition(float width, float height);
 			void setCellTexture();
-			sf::Vector2f getCellScreenPosition();
+			//sf::Vector2f getCellScreenPosition();
 
 		public:
 			CellView(CellController* controller);

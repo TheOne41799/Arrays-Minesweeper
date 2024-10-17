@@ -28,15 +28,27 @@ namespace Gameplay
 			//cell_button->initialize("Cell", Config::cells_texture_path, width, height, sf::Vector2f(0, 0));
 			//cell_button->initialize("Cell", Config::cells_texture_path, width * slice_count, height, sf::Vector2f(0, 0));
 
-			sf::Vector2f cell_screen_position = getCellScreenPosition();
+			//sf::Vector2f cell_screen_position = getCellScreenPosition();
+
+			sf::Vector2f cell_screen_position = getCellScreenPosition(width, height);
 
 			cell_button->initialize("Cell", Config::cells_texture_path, width * slice_count, height, cell_screen_position);
 		}
 
-		sf::Vector2f CellView::getCellScreenPosition()
+		/*sf::Vector2f CellView::getCellScreenPosition()
 		{
 			float x_screen_position = cell_left_offset;
 			float y_screen_position = cell_top_offset;
+
+			return sf::Vector2f(x_screen_position, y_screen_position);
+		}*/
+
+		sf::Vector2f CellView::getCellScreenPosition(float width, float height)
+		{
+			sf::Vector2i cell_index = cell_controller->getCellPosition();
+
+			float x_screen_position = cell_left_offset + cell_index.y * width;
+			float y_screen_position = cell_top_offset + cell_index.x * height;
 
 			return sf::Vector2f(x_screen_position, y_screen_position);
 		}

@@ -15,9 +15,15 @@ namespace Gameplay
 			cell_view = new CellView(this);
 		}*/
 
-		CellController::CellController(int cell_index)
+		/*CellController::CellController(int cell_index)
 		{
 			cell_model = new CellModel(cell_index);
+			cell_view = new CellView(this);
+		}*/
+
+		CellController::CellController(sf::Vector2i grid_position)
+		{
+			cell_model = new CellModel(grid_position);
 			cell_view = new CellView(this);
 		}
 
@@ -62,9 +68,9 @@ namespace Gameplay
 			delete (cell_model);
 		}
 
-		int CellController::getCellIndex()
+		sf::Vector2i CellController::getCellPosition()
 		{
-			return cell_model->cell_index;
+			return cell_model->getCellPosition();
 		}
 	}
 }
