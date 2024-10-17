@@ -20,7 +20,12 @@ namespace Gameplay
 
 		void BoardController::createBoard()
 		{
-			cell = new CellController();
+			//cell = new CellController();
+
+			for (int i = 0; i < number_of_colums; i++)
+			{
+				cells[i] = new CellController(i);
+			}
 		}
 
 		void BoardController::initialize()

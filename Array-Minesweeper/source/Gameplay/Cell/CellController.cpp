@@ -9,9 +9,15 @@ namespace Gameplay
 	namespace Cell
 	{
 
-		CellController::CellController()
+		/*CellController::CellController()
 		{
 			cell_model = new CellModel();
+			cell_view = new CellView(this);
+		}*/
+
+		CellController::CellController(int cell_index)
+		{
+			cell_model = new CellModel(cell_index);
 			cell_view = new CellView(this);
 		}
 
@@ -54,6 +60,11 @@ namespace Gameplay
 		{
 			delete (cell_view);
 			delete (cell_model);
+		}
+
+		int CellController::getCellIndex()
+		{
+			return cell_model->cell_index;
 		}
 	}
 }

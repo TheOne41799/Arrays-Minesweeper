@@ -32,8 +32,12 @@ namespace Gameplay
             CellState cell_state;
             CellValue cell_value;
 
+            
+
         public:
-            CellModel();
+            int cell_index;
+
+            CellModel(int index);
             ~CellModel();
 
             CellState getCellState();
@@ -41,6 +45,8 @@ namespace Gameplay
 
             CellValue getCellValue();
             void setCellValue(CellValue value);
+
+            int getCellIndex();
 
             void reset();
         };
