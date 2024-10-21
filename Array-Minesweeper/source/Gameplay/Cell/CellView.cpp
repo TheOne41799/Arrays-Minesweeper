@@ -2,6 +2,7 @@
 #include "../../header/Global/Config.h"
 #include "../../header/Gameplay/Cell/CellModel.h"
 #include "../../header/Gameplay/Cell/CellController.h"
+#include <iostream>
 
 namespace Gameplay
 {
@@ -33,6 +34,8 @@ namespace Gameplay
 			sf::Vector2f cell_screen_position = getCellScreenPosition(width, height);
 
 			cell_button->initialize("Cell", Config::cells_texture_path, width * slice_count, height, cell_screen_position);
+
+			registerButtonCallback();
 		}
 
 		/*sf::Vector2f CellView::getCellScreenPosition()
@@ -80,6 +83,25 @@ namespace Gameplay
 
 			case::Gameplay::Cell::CellState::FLAGGED:
 				cell_button->setTextureRect(sf::IntRect(11 * tile_size, 0, tile_size, tile_size));
+				break;
+			}
+		}
+
+		void CellView::registerButtonCallback()
+		{
+			cell_button->registerCallbackFuntion(std::bind(&CellView::cellButtonCallback, this, std::placeholders::_1));
+		}
+
+		void CellView::cellButtonCallback(ButtonType button_type)
+		{
+			switch (button_type)
+			{
+			case UI::UIElement::ButtonType::LEFT_MOUSE_BUTTON:
+				cell_controller->openCell();
+				break;
+			case UI::UIElement::ButtonType::RIGHT_MOUSE_BUTTON:
+				//Yet to be implemented
+				cell_controller->flagCell();
 				break;
 			}
 		}

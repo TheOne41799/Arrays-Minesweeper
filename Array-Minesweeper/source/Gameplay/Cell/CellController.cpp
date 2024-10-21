@@ -8,6 +8,8 @@ namespace Gameplay
 {
 	namespace Cell
 	{
+		using namespace Global;
+		using namespace Sound;
 
 		/*CellController::CellController()
 		{
@@ -71,6 +73,28 @@ namespace Gameplay
 		sf::Vector2i CellController::getCellPosition()
 		{
 			return cell_model->getCellPosition();
+		}
+
+		void CellController::flagCell()
+		{
+			switch (cell_model->getCellState())
+			{
+			case::Gameplay::Cell::CellState::FLAGGED:
+				cell_model->setCellState(CellState::HIDDEN);
+				break;
+			case::Gameplay::Cell::CellState::HIDDEN:
+				cell_model->setCellState(CellState::FLAGGED);
+				break;
+			}
+		}
+
+		void CellController::openCell()
+		{
+			if (cell_model->getCellState() != CellState::FLAGGED)
+			{
+				cell_model->setCellState(CellState::OPEN);
+				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
+			}
 		}
 	}
 }
