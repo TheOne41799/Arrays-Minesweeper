@@ -35,3 +35,5 @@ namespace Graphics
 		sf::RenderWindow* getGameWindow();
 	};
 }
+
+
