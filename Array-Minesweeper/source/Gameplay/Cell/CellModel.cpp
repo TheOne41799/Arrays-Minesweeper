@@ -4,13 +4,9 @@ namespace Gameplay
 {
 	namespace Cell
 	{
-		/*CellModel::CellModel(int index)
-		{
-			cell_index = index;
-		}*/
-
 		CellModel::CellModel(sf::Vector2i grid_position)
 		{
+			reset();
 			position = grid_position;
 		}
 
@@ -36,12 +32,6 @@ namespace Gameplay
 			cell_value = value;
 		}
 
-		void CellModel::reset()
-		{
-			cell_state = CellState::HIDDEN;
-			cell_value = CellValue::EMPTY;
-		}
-
 		sf::Vector2i CellModel::getCellPosition()
 		{
 			return position;
@@ -50,6 +40,12 @@ namespace Gameplay
 		void CellModel::setCellPosition(sf::Vector2i grid_position)
 		{
 			position = grid_position;
+		}
+
+		void CellModel::reset()
+		{
+			cell_state = CellState::HIDDEN;
+			cell_value = CellValue::EMPTY;
 		}
 	}
 }

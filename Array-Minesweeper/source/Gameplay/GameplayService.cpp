@@ -38,6 +38,11 @@ namespace Gameplay
 		gameplay_controller->restart();
 	}
 
+	void GameplayService::endGame(GameResult result)
+	{
+		gameplay_controller->endGame(result);
+	}
+
 	int GameplayService::getMinesCount()
 	{
 		return gameplay_controller->getMinesCount();

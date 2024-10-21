@@ -1,11 +1,15 @@
 #pragma once
 #include "../../header/Gameplay/Board/BoardController.h"
+#include "../../header/Gameplay/Cell/CellController.h"
+#include "../../header/UI/UIElement/ButtonView.h"
 
 
 namespace Gameplay
 {
-	namespace Board
-	{
+    enum class GameResult;
+
+    namespace Board
+    {
         class BoardService
         {
         private:
@@ -20,9 +24,16 @@ namespace Gameplay
             void update();
             void render();
 
+            void processCellInput(Cell::CellController* cell_controller, UI::UIElement::ButtonType button_type);
+
+            BoardState getBoardState();
+            void setBoardState(BoardState state);
+            void resetBoard();
+
             int getMinesCount();
 
-            void resetBoard();
+            void flagAllMines();
+            void showBoard();
         };
-	}
+    }
 }

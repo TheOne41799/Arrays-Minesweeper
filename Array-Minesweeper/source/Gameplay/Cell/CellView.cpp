@@ -1,109 +1,93 @@
 #include "../../header/Gameplay/Cell/CellView.h"
-#include "../../header/Global/Config.h"
+
+#include <iostream>
+
 #include "../../header/Gameplay/Cell/CellModel.h"
 #include "../../header/Gameplay/Cell/CellController.h"
-#include <iostream>
+#include "../../header/Global/Config.h"
+#include "../../header/Global/ServiceLocator.h"
+#include "../../header/Gameplay/GameplayService.h"
+#include "../../header/Sound/SoundService.h"
 
 namespace Gameplay
 {
-	namespace Cell
-	{
-		using namespace UI::UIElement;
-		using namespace Global;
+    namespace Cell
+    {
+        using namespace UI::UIElement;
+        using namespace Global;
+        using namespace Sound;
 
-		CellView::CellView(CellController* controller)
-		{
-			cell_controller = controller;
-			cell_button = new ButtonView();
-		}
+        CellView::CellView(CellController* controller)
+        {
+            cell_controller = controller;
+            cell_button = new ButtonView();
+        }
 
-		CellView::~CellView() { delete (cell_button); }
+        CellView::~CellView() { delete (cell_button); }
 
-		void CellView::initialize(float width, float height)
-		{
-			initializeButtonImage(width, height);
-		}
+        void CellView::initialize(float width, float height)
+        {
+            initializeButtonImage(width, height);
+        }
 
-		void CellView::initializeButtonImage(float width, float height)
-		{
-			//cell_button->initialize("Cell", Config::cells_texture_path, width, height, sf::Vector2f(0, 0));
-			//cell_button->initialize("Cell", Config::cells_texture_path, width * slice_count, height, sf::Vector2f(0, 0));
+        void CellView::initializeButtonImage(float width, float height)
+        {
+            sf::Vector2f cell_screen_position = getCellScreenPosition(width, height);
 
-			//sf::Vector2f cell_screen_position = getCellScreenPosition();
+            cell_button->initialize("Cell", Config::cells_texture_path, width * slice_count, height, cell_screen_position);
 
-			sf::Vector2f cell_screen_position = getCellScreenPosition(width, height);
+            registerButtonCallback();
+        }
 
-			cell_button->initialize("Cell", Config::cells_texture_path, width * slice_count, height, cell_screen_position);
+        sf::Vector2f CellView::getCellScreenPosition(float width, float height)
+        {
+            sf::Vector2i cell_index = cell_controller->getCellPosition();
 
-			registerButtonCallback();
-		}
+            float x_screen_position = cell_left_offset + cell_index.y * width;
+            float y_screen_position = cell_top_offset + cell_index.x * height;
 
-		/*sf::Vector2f CellView::getCellScreenPosition()
-		{
-			float x_screen_position = cell_left_offset;
-			float y_screen_position = cell_top_offset;
+            return sf::Vector2f(x_screen_position, y_screen_position);
+        }
 
-			return sf::Vector2f(x_screen_position, y_screen_position);
-		}*/
+        void CellView::update()
+        {
+            cell_button->update();
+        }
 
-		sf::Vector2f CellView::getCellScreenPosition(float width, float height)
-		{
-			sf::Vector2i cell_index = cell_controller->getCellPosition();
+        void CellView::render()
+        {
+            setCellTexture();
+            cell_button->render();
+        }
 
-			float x_screen_position = cell_left_offset + cell_index.y * width;
-			float y_screen_position = cell_top_offset + cell_index.x * height;
+        void CellView::setCellTexture()
+        {
+            int index = static_cast<int>(cell_controller->getCellValue());
 
-			return sf::Vector2f(x_screen_position, y_screen_position);
-		}
+            switch (cell_controller->getCellState())
+            {
+            case::Gameplay::Cell::CellState::HIDDEN:
+                cell_button->setTextureRect(sf::IntRect(10 * tile_size, 0, tile_size, tile_size));
+                break;
 
-		void CellView::update()
-		{
-			cell_button->update();
-		}
+            case::Gameplay::Cell::CellState::OPEN:
+                cell_button->setTextureRect(sf::IntRect(index * tile_size, 0, tile_size, tile_size));
+                break;
 
-		void CellView::render()
-		{
-			setCellTexture();
-			cell_button->render();
-		}
+            case::Gameplay::Cell::CellState::FLAGGED:
+                cell_button->setTextureRect(sf::IntRect(11 * tile_size, 0, tile_size, tile_size));
+                break;
+            }
+        }
 
-		void CellView::setCellTexture()
-		{
-			int index = static_cast<int>(cell_controller->getCellValue());
+        void CellView::registerButtonCallback()
+        {
+            cell_button->registerCallbackFuntion(std::bind(&CellView::cellButtonCallback, this, std::placeholders::_1));
+        }
 
-			switch (cell_controller->getCellState())
-			{
-			case::Gameplay::Cell::CellState::HIDDEN:
-				cell_button->setTextureRect(sf::IntRect(10 * tile_size, 0, tile_size, tile_size));
-				break;
-
-			case::Gameplay::Cell::CellState::OPEN:
-				cell_button->setTextureRect(sf::IntRect(index * tile_size, 0, tile_size, tile_size));
-				break;
-
-			case::Gameplay::Cell::CellState::FLAGGED:
-				cell_button->setTextureRect(sf::IntRect(11 * tile_size, 0, tile_size, tile_size));
-				break;
-			}
-		}
-
-		void CellView::registerButtonCallback()
-		{
-			cell_button->registerCallbackFuntion(std::bind(&CellView::cellButtonCallback, this, std::placeholders::_1));
-		}
-
-		void CellView::cellButtonCallback(ButtonType button_type)
-		{
-			switch (button_type)
-			{
-			case UI::UIElement::ButtonType::LEFT_MOUSE_BUTTON:
-				cell_controller->openCell();
-				break;
-			case UI::UIElement::ButtonType::RIGHT_MOUSE_BUTTON:
-				//Yet to be implemented
-				cell_controller->flagCell();
-				break;
-			}
-		}
-	}
+        void CellView::cellButtonCallback(ButtonType button_type)
+        {
+            ServiceLocator::getInstance()->getBoardService()->processCellInput(cell_controller, button_type);
+        }
+    }
 }

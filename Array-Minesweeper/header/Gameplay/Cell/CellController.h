@@ -13,14 +13,12 @@ namespace Gameplay
         class CellController
         {
         private:
-            CellModel* cell_model;
             CellView* cell_view;
+            CellModel* cell_model;
 
             void destroy();
 
         public:
-            //CellController();
-            //CellController(int cell_index);
             CellController(sf::Vector2i grid_position);
             ~CellController();
 
@@ -31,8 +29,13 @@ namespace Gameplay
             void flagCell();
             void openCell();
 
+            bool canOpenCell();
             CellState getCellState();
+            void setCellState(CellState state);
+
             CellValue getCellValue();
+            void setCellValue(CellValue value);
+
             sf::Vector2i getCellPosition();
 
             void reset();
