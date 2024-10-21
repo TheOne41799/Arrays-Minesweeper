@@ -1,11 +1,13 @@
 #include "../../header/Gameplay/GameplayController.h"
 #include "../../header/Gameplay/Board/BoardService.h"
+#include "../../header/Time/TimeService.h"
 #include "../../header/Global/ServiceLocator.h"
 
 namespace Gameplay
 {
     using namespace Board;
     using namespace Global;
+    using namespace Time;
 
     GameplayController::GameplayController() {}
 
@@ -19,15 +21,18 @@ namespace Gameplay
     }
 
     void GameplayController::render() {  }
+
+    void GameplayController::updateRemainingTime() { remaining_time -= ServiceLocator::getInstance()->getTimeService()->getDeltaTime(); }
+
     void GameplayController::restart()
     {
         ServiceLocator::getInstance()->getBoardService()->resetBoard();
         remaining_time = max_level_duration;
     }
 
-    void GameplayController::updateRemainingTime()
+    int GameplayController::getMinesCount()
     {
-        remaining_time -= ServiceLocator::getInstance()->getTimeService()->getDeltaTime();
+        return ServiceLocator::getInstance()->getBoardService()->getMinesCount();
     }
 
     float GameplayController::getRemainingTime() { return remaining_time; }

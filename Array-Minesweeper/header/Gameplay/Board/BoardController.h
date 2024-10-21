@@ -19,6 +19,8 @@ namespace Gameplay
 			BoardController();
 			~BoardController();
 
+			int getMinesCount();
+
 			void initialize();
 			void update();
 			void render();

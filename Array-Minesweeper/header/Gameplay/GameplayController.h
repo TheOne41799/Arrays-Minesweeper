@@ -1,12 +1,13 @@
 #pragma once
-
+#include "../../header/Gameplay/Board/BoardController.h"
+#include <SFML/Graphics.hpp>
 
 namespace Gameplay
 {
     class GameplayController
     {
     private:
-        const float max_level_duration = 301.0f;
+        const float max_level_duration = 301.f;
 
         float remaining_time;
 
@@ -21,7 +22,7 @@ namespace Gameplay
         void render();
 
         void restart();
-
+        int getMinesCount();
         float getRemainingTime();
     };
 }
